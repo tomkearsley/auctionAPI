@@ -48,4 +48,15 @@ exports.checkToken = function(req,done){
             done(rows[0]['user_id']);
 
         });
-}
+};
+
+exports.getUserJson = function(user_id,done){
+    db.get_pool().query('SELECT * FROM auction_user WHERE user_id = ?',user_id,
+        function(err,result){
+        if(err) {
+            done(false);
+            return;
+        }
+        done(result);
+    });
+};

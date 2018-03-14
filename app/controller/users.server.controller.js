@@ -50,10 +50,20 @@ exports.read = function(req,res){
     });
 }
 
+
+/**
+ * Return Json file of user.
+ * @param req
+ * @param res
+ */
 exports.getUser = function(req,res){
+    let userID = req.params.id;
     User.checkToken(req,function(result){
-        if(result){
-            console.log("Working");
+        if(result == userID){
+            User.getUserJson(result,function(resultantUser){
+                res.json(resultantUser);
+            });
+
         }
     });
 
