@@ -1,5 +1,6 @@
 const db = require('../../config/db');
 
+
 exports.insert =  function(username,givenName,familyName,email,password,done){
   let values = [username,givenName,familyName,email,password];
 
@@ -12,9 +13,19 @@ exports.insert =  function(username,givenName,familyName,email,password,done){
 
 
 exports.getOne = function(username,password,done){
-    db.get_pool().query('SELECT * FROM auction_user WHERE user_username = ? AND user_password = ?', [username,password],
-        function (err,rows) {
-        if (err) return done({"ERROR": "Error Selecting"});
+    db.get_pool().query('SELECT user_id FROM auction_user WHERE user_username = ? AND user_password = ?', [username,password],
+        function (err, rows) {
+        console.log(rows);
+        if (rows == []) {
+            console.log("SOS");
+            done(false);
+            return;
+        }
+        if (err){
+            done(false);
+            return;
+        }
+            done(rows[0]['user_id']);
 
     });
 };

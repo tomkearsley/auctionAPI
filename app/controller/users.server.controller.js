@@ -1,4 +1,5 @@
-const User = require('../model/users.server.model');
+const User = require('../model/users.server.model'),
+    authenticate = require('./authentication.server.controller');
 
 exports.create = function(req,res){
         let user_data =  {
@@ -31,10 +32,14 @@ exports.create = function(req,res){
 
 
 exports.read = function(req,res){
-    let id= req.query.username;
-    let pass = req.query.password;
-    User.getOne(id,pass,function(result){
-        res.json(result);
+    let username = req.query.user_username;
+    let password = req.query.user_password;
+    User.getOne(username,password,function(result){
+        if(result){
+            res.json(authenticate.generateToken(username,password,result))
+        } else {
+            res.send("Invalid username/email/password supplied");
+        }
     });
 }
 

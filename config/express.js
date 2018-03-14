@@ -1,6 +1,11 @@
 const express = require('express'),
     bodyParser = require('body-parser');
 
+var jwt = require('jsonwebtoken');
+
+
+process.env.SECRET_KEY = "mykey";
+
 module.exports = function () {
     const app = express();
     app.use(bodyParser.json());
