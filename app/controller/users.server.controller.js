@@ -30,7 +30,7 @@ exports.create = function(req,res){
         });
 };
 
-
+// TODO: Add ability to login using email OR username.
 exports.read = function(req,res){
     let username = req.query.user_username;
     let password = req.query.user_password;
@@ -48,7 +48,7 @@ exports.read = function(req,res){
             res.send("Invalid username/email/password supplied");
         }
     });
-}
+};
 
 
 /**
@@ -64,6 +64,8 @@ exports.getUser = function(req,res){
                 res.json(resultantUser);
             });
 
+        } else {
+            res.send("Invalid token supplied")
         }
     });
 
@@ -71,5 +73,19 @@ exports.getUser = function(req,res){
 
 
 
-}
+};
+
+exports.logOut = function(req,res){
+    User.checkToken(req,function(result){
+        console.log(result);
+        if(result == 1){
+            User.ResetToken(result,function(leavingUser){
+            });
+
+        } else {
+            res.send("Invalid token supplied ")
+        }
+    });
+
+};
 

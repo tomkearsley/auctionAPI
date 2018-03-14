@@ -60,3 +60,10 @@ exports.getUserJson = function(user_id,done){
         done(result);
     });
 };
+
+exports.ResetToken = function(user_id,done){
+    db.get_pool().query('UPDATE auction_user SET user_token = null WHERE user_id = ?',user_id,function(err,result){
+        if (err) return done(err);
+        done(result);
+    });
+};
