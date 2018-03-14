@@ -34,12 +34,32 @@ exports.create = function(req,res){
 exports.read = function(req,res){
     let username = req.query.user_username;
     let password = req.query.user_password;
-    User.getOne(username,password,function(result){
+    User.login(username,password,function(result){
         if(result){
-            res.json(authenticate.generateToken(username,password,result))
+            let userReply = authenticate.generateToken(username,password,result);
+            res.json(userReply);
+            let user_id = userReply['id'];
+            let token = userReply['token'];
+
+            User.insertToken(token,user_id,function(result){
+            });
+
         } else {
             res.send("Invalid username/email/password supplied");
         }
     });
+}
+
+exports.getUser = function(req,res){
+    User.checkToken(req,function(result){
+        if(result){
+            console.log("Working");
+        }
+    });
+
+
+
+
+
 }
 
