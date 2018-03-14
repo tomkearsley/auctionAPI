@@ -9,3 +9,12 @@ exports.insert =  function(username,givenName,familyName,email,password,done){
       done(result);
     });
 };
+
+
+exports.getOne = function(username,password,done){
+    db.get_pool().query('SELECT * FROM auction_user WHERE user_username = ? AND user_password = ?', [username,password],
+        function (err,rows) {
+        if (err) return done({"ERROR": "Error Selecting"});
+
+    });
+};

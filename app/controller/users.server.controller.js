@@ -30,4 +30,11 @@ exports.create = function(req,res){
 };
 
 
+exports.read = function(req,res){
+    let id= req.query.username;
+    let pass = req.query.password;
+    User.getOne(id,pass,function(result){
+        res.json(result);
+    });
+}
 
