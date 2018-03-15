@@ -75,15 +75,21 @@ exports.getUser = function(req,res){
 
 };
 
+/**
+ * Logout Function
+ * If Token is valid, it will log out. Else 401 error will be returned
+ * @param req used in check token method.
+ * @param res Used to throw correct code
+ */
 exports.logOut = function(req,res){
     User.checkToken(req,function(result){
-        console.log(result);
-        if(result == 1){
+        if(result){
             User.ResetToken(result,function(leavingUser){
+                res.status(200).send();
             });
 
         } else {
-            res.send("Invalid token supplied ")
+            res.status(401).send();
         }
     });
 
