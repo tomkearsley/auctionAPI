@@ -1,9 +1,8 @@
 let jwt = require('jsonwebtoken');
 
-exports.generateToken = function(username,password,user_id) {
+exports.generateToken = function(userIdentifier,password,user_id) {
 
     let user = {
-        "username": username,
         "password": password
 
     };

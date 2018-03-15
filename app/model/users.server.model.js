@@ -4,22 +4,28 @@ const db = require('../../config/db');
 exports.insert =  function(username,givenName,familyName,email,password,done){
   let values = [username,givenName,familyName,email,password];
 
-  db.get_pool().query('INSERT INTO  auction_user (user_username,user_givenname,user_familyname,user_email,user_password) V  `ALUES ?',
+  db.get_pool().query('INSERT INTO  auction_user (user_username,user_givenname,user_familyname,user_email,user_password) VALUES ?',
       values[0],values[1],values[2],values[3],values[4],function(err,result){
       if (err) return done(err);
       done(result);
     });
 };
 
-
-exports.login = function(username,password,done){
-    db.get_pool().query('SELECT user_id FROM auction_user WHERE user_username = ? AND user_password = ?', [username,password],
+exports.login = function(userIdentifier,password,done){
+    console.log(userIdentifier);
+    db.get_pool().query('SELECT user_id FROM auction_user WHERE (user_username = ? OR user_email = ?) ' +
+        'AND user_password = ?', [userIdentifier,userIdentifier,password],
         function (err, rows) {
         if (err){
             done(false);
             return;
         }
-            done(rows[0]['user_id']);
+            try {
+                done(rows[0]['user_id']);
+            } catch (TypeError) {
+                done(false);
+            }
+
 
     });
 };
@@ -66,4 +72,11 @@ exports.ResetToken = function(user_id,done){
         if (err) return done(err);
         done(result);
     });
+};
+
+
+exports.updateUserDetails = function(user_details,done){
+    db.get_pool().query('UPDATE auction_user SET (user_username,user_givenname,user_familyname,user_email,user_password) ' +
+        'VALUES ? WHERE user_id = ?')
+
 };

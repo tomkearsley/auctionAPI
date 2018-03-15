@@ -6,7 +6,8 @@ module.exports = function(app){
     app.route('/api/v1/users/login')
         .post(users.read);
     app.route('/api/v1/users/:id')
-        .get(users.getUser);
+        .get(users.getUser)
+        .patch(users.updateUser);
     app.route('/api/v1/users/logout')
         .post(users.logOut);
 };

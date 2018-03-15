@@ -10,8 +10,6 @@ exports.create = function(req,res){
             "password": req.body.password
         };
 
-        console.log(user_data);
-
         let username = user_data['username'].toString();
         let givenName = user_data['givenName'].toString();
         let familyName = user_data['familyName'].toString();
@@ -30,13 +28,17 @@ exports.create = function(req,res){
         });
 };
 
-// TODO: Add ability to login using email OR username.
+
 exports.read = function(req,res){
-    let username = req.query.user_username;
-    let password = req.query.user_password;
-    User.login(username,password,function(result){
+    let userIdentifier = req.query.username;
+    if (userIdentifier == undefined){
+        let email = req.query.email;
+        userIdentifier = email;
+    }
+    let password = req.query.password;
+    User.login(userIdentifier,password,function(result){
         if(result){
-            let userReply = authenticate.generateToken(username,password,result);
+            let userReply = authenticate.generateToken(userIdentifier,password,result);
             res.json(userReply);
             let user_id = userReply['id'];
             let token = userReply['token'];
@@ -45,7 +47,7 @@ exports.read = function(req,res){
             });
 
         } else {
-            res.send("Invalid username/email/password supplied");
+            res.status(400).send("Invalid username/email/password supplied");
         }
     });
 };
@@ -94,4 +96,9 @@ exports.logOut = function(req,res){
     });
 
 };
+
+
+exports.updateUser = function (req,res){
+    User.updateUserDetails()
+}
 
