@@ -31,9 +31,8 @@ exports.create = function(req,res){
 
 exports.read = function(req,res){
     let userIdentifier = req.query.username;
-    if (userIdentifier == undefined){
-        let email = req.query.email;
-        userIdentifier = email;
+    if (userIdentifier === undefined){
+        userIdentifier = req.query.email;
     }
     let password = req.query.password;
     User.login(userIdentifier,password,function(result){
@@ -100,5 +99,5 @@ exports.logOut = function(req,res){
 
 exports.updateUser = function (req,res){
     User.updateUserDetails()
-}
+};
 

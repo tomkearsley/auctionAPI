@@ -12,7 +12,6 @@ exports.insert =  function(username,givenName,familyName,email,password,done){
 };
 
 exports.login = function(userIdentifier,password,done){
-    console.log(userIdentifier);
     db.get_pool().query('SELECT user_id FROM auction_user WHERE (user_username = ? OR user_email = ?) ' +
         'AND user_password = ?', [userIdentifier,userIdentifier,password],
         function (err, rows) {
@@ -30,7 +29,12 @@ exports.login = function(userIdentifier,password,done){
     });
 };
 
-
+/**
+ * Inserts token into user after login has been completed.
+ * @param token
+ * @param user_id
+ * @param done Returns true if successful
+ */
 exports.insertToken = function(token,user_id,done){
     db.get_pool().query('UPDATE auction_user SET user_token = ? WHERE user_id = ?',[token,user_id],function(err,result){
         if (err) return done(err);
