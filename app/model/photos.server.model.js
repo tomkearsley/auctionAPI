@@ -10,3 +10,14 @@ exports.postPhoto = function(auctionId,contentType,req,done) {
 
 };
 
+exports.deletePhoto = function(auctionId,contentType,done){
+
+    fs.unlink(path + auctionId + '.' + contentType,function(err){
+        if(err){
+            done(false);
+        } else {
+            done(true);
+        }
+
+    })
+};

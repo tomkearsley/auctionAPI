@@ -22,3 +22,21 @@ exports.post = function (req,res) {
     });
 
 };
+
+exports.delete = function(req,res) {
+    let auctionId = parseInt(req.params.id);
+    let contentType = req.get("Content-Type");
+    User.checkToken(req,function (result) {
+        if (contentType === 'jpeg' || contentType === 'png'||contentType === 'jpg')
+        {
+            Photos.deletePhoto(auctionId,contentType,function(photoRemoved){
+                if(photoRemoved){
+                    res.status(201).send("OK");
+                } else {
+                    res.status(400).send("Bad request.");
+                }
+            })
+        }
+
+    })
+};
