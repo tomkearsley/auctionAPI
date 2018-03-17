@@ -31,3 +31,15 @@ exports.create = function(req,res){
     });
 
 };
+
+exports.getOne = function(req,res) {
+    let auctionId = req.params.id;
+    Auction.getAuction(auctionId,function(resultantAuction){
+        if(resultantAuction){
+            res.json(resultantAuction);
+        }
+        else {
+
+        }
+    });
+};

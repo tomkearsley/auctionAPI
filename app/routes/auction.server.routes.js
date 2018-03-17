@@ -7,5 +7,8 @@ module.exports =  function(app){
         //.get(auctions.getAuctions)
         .post(auctions.create);
 
+    app.route('/api/v1/auctions/:id')
+        .get(auctions.getOne);
+
 };
 

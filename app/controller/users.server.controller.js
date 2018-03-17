@@ -66,7 +66,7 @@ exports.getUser = function(req,res){
             });
 
         } else {
-            res.send("Invalid token supplied")
+            res.status(404).send("Not Found")
         }
     });
 

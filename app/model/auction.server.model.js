@@ -22,3 +22,16 @@ exports.createAuction = function(token, auction_data, done) {
         });
     });
 };
+
+
+
+exports.getAuction = function(auctionId,done){
+    db.get_pool().query("SELECT * FROM auction WHERE auction_id = ?",auctionId,function (err,rows) {
+        if(err){
+            done(false);
+        } else{
+            done(rows);
+        }
+
+    });
+};
