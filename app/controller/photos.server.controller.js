@@ -6,7 +6,6 @@ const Photos = require('../model/photos.server.model');
 exports.post = function (req,res) {
     let auctionId = parseInt(req.params.id);
     let contentType = req.get("Content-Type");
-    console.log(contentType);
     User.checkToken(req,function(result){
         if (contentType === 'jpeg' || contentType === 'png'||contentType === 'jpg')
             {
@@ -38,5 +37,16 @@ exports.delete = function(req,res) {
             })
         }
 
+    })
+};
+
+exports.get = function(req,res){
+    let auctionId = parseInt(req.params.id);
+    Photos.getPhoto(res, auctionId,function(result){
+        if(result){
+            res.status(200).send(result)
+        } else {
+            res.status(400).send("Bad request.")
+        }
     })
 };
