@@ -62,10 +62,6 @@ exports.getHistory = function(req,res) {
 exports.makeBid = function(req,res){
     let amount = req.query.amount;
     let id = req.params.id;
-    let bid = [
-        amount,
-        id
-    ];
     User.checkToken(req,function(result){
         let user_id = result;
         Auction.addBid(amount,id,user_id,function(bidAdded){

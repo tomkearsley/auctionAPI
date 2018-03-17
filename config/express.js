@@ -12,6 +12,6 @@ module.exports = function () {
     require('../app/routes/users.server.routes')(app);
     require('../app/routes/auction.server.routes')(app);
     require('../app/routes/database.server.routes')(app);
-    //require('../app/routes/photos.server.routes')(app);
+    require('../app/routes/photos.server.routes')(app);
     return app;
 };
