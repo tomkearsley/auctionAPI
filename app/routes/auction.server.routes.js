@@ -9,6 +9,9 @@ module.exports =  function(app){
 
     app.route('/api/v1/auctions/:id')
         .get(auctions.getOne);
+    app.route('/api/v1/auctions/:id/bids')
+        .get(auctions.getHistory)
+        .post(auctions.makeBid);
 
 };
 

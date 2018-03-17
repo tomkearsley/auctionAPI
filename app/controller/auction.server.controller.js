@@ -32,6 +32,7 @@ exports.create = function(req,res){
 
 };
 
+
 exports.getOne = function(req,res) {
     let auctionId = req.params.id;
     Auction.getAuction(auctionId,function(resultantAuction){
@@ -41,5 +42,40 @@ exports.getOne = function(req,res) {
         else {
 
         }
+    });
+};
+
+
+exports.getHistory = function(req,res) {
+    let auctionId = req.params.id;
+    Auction.getBidHistory(auctionId,function(result){
+        if(result){
+            res.json(result);
+        }
+        else {
+            res.status(400).send("Bad request.");
+        }
+    });
+};
+
+
+exports.makeBid = function(req,res){
+    let amount = req.query.amount;
+    let id = req.params.id;
+    let bid = [
+        amount,
+        id
+    ];
+    User.checkToken(req,function(result){
+        let user_id = result;
+        Auction.addBid(amount,id,user_id,function(bidAdded){
+            if(bidAdded){
+                res.status(200).send("OK");
+
+            } else{
+                res.status(400).send("Bad request.");
+            }
+
+        })
     });
 };
