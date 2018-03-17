@@ -55,7 +55,12 @@ exports.checkToken = function(req,done){
                 done(false);
                 return;
             }
-            done(rows[0]['user_id']);
+            try{
+                done(rows[0]['user_id']);
+            } catch (TypeError) {
+                done(false);
+            }
+
 
         });
 };

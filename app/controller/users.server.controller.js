@@ -90,7 +90,7 @@ exports.logOut = function(req,res){
             });
 
         } else {
-            res.status(401).send();
+            res.status(401).send("Unauthorized");
         }
     });
 
