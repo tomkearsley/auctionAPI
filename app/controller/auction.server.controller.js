@@ -49,11 +49,11 @@ exports.getOne = function(req,res) {
 exports.getHistory = function(req,res) {
     let auctionId = req.params.id;
     Auction.getBidHistory(auctionId,function(result){
-        if(result){
+        if(result.length > 0){
             res.json(result);
         }
         else {
-            res.status(400).send("Bad request.");
+            res.status(404).send("Bad request.");
         }
     });
 };
@@ -74,4 +74,8 @@ exports.makeBid = function(req,res){
 
         })
     });
+};
+
+exports.updateAuction = function(req,res){
+
 };
