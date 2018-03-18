@@ -42,11 +42,13 @@ exports.delete = function(req,res) {
 
 exports.get = function(req,res){
     let auctionId = parseInt(req.params.id);
-    Photos.getPhoto(res, auctionId,function(result){
+    let contentType = req.get('Content-Type')
+    Photos.getPhoto(res, auctionId,contentType,function(result){
         if(result){
-            res.status(200).send(result)
+            //res.status(200).send("OK");
         } else {
             res.status(400).send("Bad request.")
         }
     })
 };
+

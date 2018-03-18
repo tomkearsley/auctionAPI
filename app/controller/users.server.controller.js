@@ -98,6 +98,43 @@ exports.logOut = function(req,res){
 
 
 exports.updateUser = function (req,res){
-    User.updateUserDetails()
+    let user_data =  {
+        "id": req.body.id,
+        "username": req.body.username,
+        "givenName": req.body.givenName,
+        "familyName": req.body.familyName,
+        "email": req.body.email,
+        "password": req.body.password,
+        "salt":req.body.salt,
+        "token":req.body.token,
+        "accountBalance":req.body.accountBalance,
+        "reputation":req.body.reputation
+
+    };
+    let jsonDataNames = ['id','username','givenName','familyName','email','password','salt','token','accountBalance','reputation'];
+    let packetDataNames = ['user_id','user_username','user_givenname','user_familyname','user_email','user_password','user_salt','user_token','user_accountbalance','user_reputation'];
+
+    User.checkToken(req,function(correctToken){
+        if(correctToken){
+            User.getUserJson(correctToken,function(resultantUser){
+                let user = resultantUser;
+                for (let i = 0; i < 9; i++){
+                    if(user_data[jsonDataNames[i]] === undefined){
+                        user_data[jsonDataNames[i]] = user[0][packetDataNames[i]];
+                    }
+                }
+                User.updateUserDetails(user_data,function(result) {
+                    if(result){
+                        res.status(200).send("OK");
+                    } else {
+                        res.status(401).send("Unauthorized");
+                    }
+                });
+
+            });
+
+
+        }
+    });
 };
 

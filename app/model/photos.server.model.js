@@ -23,11 +23,10 @@ exports.deletePhoto = function(auctionId,contentType,done){
 };
 
 
-exports.getPhoto = function(res, auctionId,done){
+exports.getPhoto = function(res, auctionId,contentType,done){
 
-    Photopath = path + auctionId + '.' + "jpeg";
-    console.log(Photopath);
-    res.sendFile(path, {root: './'});
+    let Photopath = path + auctionId + '.' + "jpeg";
+    res.sendFile(Photopath, {root: './'});
     done(true);
 
 };
