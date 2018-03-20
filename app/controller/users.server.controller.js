@@ -108,13 +108,15 @@ exports.updateUser = function (req,res){
                     if(result){
                         res.status(200).send("OK");
                     } else {
-                        res.status(401).send("Unauthorized");
+                        res.status(500).send("Internal server error");
                     }
                 });
 
             });
 
 
+        } else {
+            res.status(401).send("Unauthorized");
         }
     });
 };
