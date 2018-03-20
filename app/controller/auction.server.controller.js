@@ -15,6 +15,10 @@ exports.create = function(req,res){
         req.body.startDateTime,
         req.body.endDateTime
     ]];
+    if (req.body.categoryId < 1){
+        res.status(400).send("Bad request.");
+        return;
+    }
     User.checkToken(req,function(result){
         if(result){
             Auction.createAuction(token,auction,function(isInserted){
