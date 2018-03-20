@@ -1,33 +1,23 @@
 const User = require('../model/users.server.model'),
     authenticate = require('./authentication.server.controller');
 
-exports.create = function(req,res){
-        let user_data =  {
-            "username": req.body.username,
-            "givenName": req.body.givenName,
-            "familyName": req.body.familyName,
-            "email": req.body.email,
-            "password": req.body.password
-        };
-
-        let username = user_data['username'].toString();
-        let givenName = user_data['givenName'].toString();
-        let familyName = user_data['familyName'].toString();
-        let email = user_data['email'].toString();
-        let password = user_data['password'].toString();
-        let user = [];
-        user.push(username,givenName,familyName,email,password);
-
-        let values = [
-            [user]
-        ];
-
-
-        User.insert(values,function(result){
-            res.json(result);
-        });
+exports.create = function(req, res) {
+    let user_data = [[
+        req.body.username,
+        req.body.givenName,
+        req.body.familyName,
+        req.body.email,
+        req.body.password
+    ]];
+    User.insert(user_data, function(result) {
+        if (result === false) {
+            console.log(result);
+            res.status(400).send("malformed request");
+        } else {
+            res.status(200).send(result);
+        }
+    });
 };
-
 
 exports.read = function(req,res){
     let userIdentifier = req.query.username;
@@ -86,7 +76,7 @@ exports.logOut = function(req,res){
     User.checkToken(req,function(result){
         if(result){
             User.ResetToken(result,function(leavingUser){
-                res.status(200).send();
+                res.status(200).send("OK");
             });
 
         } else {

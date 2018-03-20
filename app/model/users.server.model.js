@@ -1,15 +1,18 @@
 const db = require('../../config/db');
 
 
-exports.insert =  function(username,givenName,familyName,email,password,done){
-  let values = [username,givenName,familyName,email,password];
+exports.insert = function(user_data, done) {
+    let sql = "INSERT INTO auction_user (user_username, user_givenname, user_familyname, user_email, user_password) VALUES (?); SELECT LAST_INSERT_ID() AS user_id";
+    db.get_pool().query(sql, user_data, function(err, rows) {
+        if (err) {
 
-  db.get_pool().query('INSERT INTO  auction_user (user_username,user_givenname,user_familyname,user_email,user_password) VALUES ?',
-      values[0],values[1],values[2],values[3],values[4],function(err,result){
-      if (err) return done(err);
-      done(result);
+            return done(false);
+        } else {
+            done({"id": rows[1][0]['user_id']});
+        }
     });
 };
+
 
 exports.login = function(userIdentifier,password,done){
     db.get_pool().query('SELECT user_id FROM auction_user WHERE (user_username = ? OR user_email = ?) ' +

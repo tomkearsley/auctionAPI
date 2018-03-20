@@ -9,7 +9,7 @@ exports.checkToken = function(req,res){
                 done(false);
                 return;
             }
-            done(rows[0]['user_token']);
+            done(rows[0]['user_token');
 
         });
 }
