@@ -69,7 +69,8 @@ exports.checkToken = function(req,done){
 };
 
 exports.getUserJson = function(user_id,done){
-    db.get_pool().query('SELECT * FROM auction_user WHERE user_id = ?',user_id,
+    db.get_pool().query('SELECT user_username AS username ,user_givenname AS givenName ,user_familyname AS familyName, ' +
+        'user_email AS email, user_accountbalance AS accountBalance FROM auction_user WHERE user_id = ?',user_id,
         function(err,result){
         if(err) {
             done(false);
