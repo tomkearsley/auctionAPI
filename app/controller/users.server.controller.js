@@ -88,31 +88,22 @@ exports.logOut = function(req,res){
 
 
 exports.updateUser = function (req,res){
-    let user_data =  {
-        "id": req.body.id,
-        "username": req.body.username,
-        "givenName": req.body.givenName,
-        "familyName": req.body.familyName,
-        "email": req.body.email,
-        "password": req.body.password,
-        "salt":req.body.salt,
-        "token":req.body.token,
-        "accountBalance":req.body.accountBalance,
-        "reputation":req.body.reputation
 
-    };
-    let jsonDataNames = ['id','username','givenName','familyName','email','password','salt','token','accountBalance','reputation'];
-    let packetDataNames = ['user_id','user_username','user_givenname','user_familyname','user_email','user_password','user_salt','user_token','user_accountbalance','user_reputation'];
+    let user_data = [req.body.username,req.body.givenName,req.body.familyName,req.body.email,req.body.password,req.body.accountBalance];
+
+    let DataNames = ['username','givenName','familyName','email','password','accountBalance','reputation'];
 
     User.checkToken(req,function(correctToken){
         if(correctToken){
             User.getUserJson(correctToken,function(resultantUser){
                 let user = resultantUser;
-                for (let i = 0; i < 9; i++){
-                    if(user_data[jsonDataNames[i]] === undefined){
-                        user_data[jsonDataNames[i]] = user[0][packetDataNames[i]];
+                for (let i = 0; i < 6; i++){
+                    if(user_data[i] === undefined){
+                        user_data[i] = user[0][DataNames[i]];
                     }
+
                 }
+                user_data.push(correctToken);
                 User.updateUserDetails(user_data,function(result) {
                     if(result){
                         res.status(200).send("OK");
