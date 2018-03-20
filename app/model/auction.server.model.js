@@ -58,8 +58,8 @@ exports.getBidHistory = function(auctionId,done){
   });
 };
 
-exports.addBid = function(amount,id,user_id,done){
-    db.get_pool().query("INSERT INTO bid (bid_auctionid,bid_amount,bid_userid) VALUES (?, ?, ?)",[id,amount,user_id],function(err,rows){
+exports.addBid = function(amount,id,user_id,bidTime,done){
+    db.get_pool().query("INSERT INTO bid (bid_auctionid,bid_amount,bid_userid,bid_datetime) VALUES (?, ?, ?,?)",[id,amount,user_id,bidTime],function(err,rows){
         if(err){
             console.log(err);
             done(false);

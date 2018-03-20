@@ -101,9 +101,10 @@ exports.getHistory = function(req,res) {
 exports.makeBid = function(req,res){
     let amount = req.query.amount;
     let id = req.params.id;
+    let bidTime = (moment(Date.now()).format("YYYY-MM-DD hh-mm-ss"));
     User.checkToken(req,function(result){
         let user_id = result;
-        Auction.addBid(amount,id,user_id,function(bidAdded){
+        Auction.addBid(amount,id,user_id,bidTime,function(bidAdded){
             if(bidAdded){
                 res.status(200).send("OK");
 
@@ -116,8 +117,10 @@ exports.makeBid = function(req,res){
 };
 
 exports.updateAuction = function(req,res){
+    let startDate = moment(req.body.startDateTime.format("YYYY-MM-DD hh-mm-ss"));
+    let endDate = moment(req.body.endDateTime.format("YYYY-MM-DD hh-mm-ss"));
 
-    let new_data = [req.body.categoryId,req.body.title,req.body.description,req.body.startingDate,req.body.endingDate,
+    let new_data = [req.body.categoryId,req.body.title,req.body.description,startDate,endDate,
     req.body.reservePrice,req.body.startingBid];
     let packetDataNames = ["auction_categoryid","auction_title","auction_description","auction_reserveprice",
         "auction_startingprice","auction_startingdate","auction_endingdate"];
