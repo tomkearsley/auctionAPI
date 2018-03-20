@@ -33,15 +33,49 @@ exports.create = function(req,res){
 };
 
 
-exports.getOne = function(req,res) {
+exports.getOne = function(req, res) {
     let auctionId = req.params.id;
-    Auction.getAuction(auctionId,function(resultantAuction){
-        if(resultantAuction){
-            res.json(resultantAuction);
+    let response = {
+        "categoryId": 0,
+        "categoryTitle": "string",
+        "title": "string",
+        "reservePrice": 0,
+        "startDateTime": 0,
+        "endDateTime": 0,
+        "description": "string",
+        "creationDateTime": 0,
+        "seller": {
+            "id": 0,
+            "username": "string",
+        },
+        "currentBid": 0,
+        "bids": []
+    };
+    Auction.getAuction(auctionId, function(auction) {
+        if (auction) {
+            response["categoryId"] = auction[0]["auction_categoryid"];
+            response["categoryTitle"] = auction[0]["auction_title"];
+            response["reservePrice"] = auction[0]["auction_reserveprice"];
+            response["startDateTime"] = auction[0]["auction_startingdate"];
+            response["endDateTime"] = auction[0]["auction_endingdate"];
+            response["description"] = auction[0]["auction_description"];
+            response["creationDateTime"] = auction[0]["auction_creationdate"];
+        } else {
+            res.send(404).send("Not found");
+            return;
         }
-        else {
-
-        }
+        Auction.getHighestBid(auctionId,function(currentBid){
+            response["currentBid"] = currentBid[0]['currentBid'];
+        });
+        let userId = auction[0]["auction_userid"];
+        Auction.getSeller(userId, function(sellerRows) {
+            let userName = sellerRows[0]["username"];
+            response["seller"] = {"id": userId, "username": userName};
+            Auction.getBidHistory(auctionId, function(bids) {
+                response["bids"] = bids;
+                res.status(200).send(response);
+            });
+        });
     });
 };
 

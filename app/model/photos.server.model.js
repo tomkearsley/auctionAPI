@@ -25,7 +25,7 @@ exports.deletePhoto = function(auctionId,contentType,done){
 
 exports.getPhoto = function(res, auctionId,contentType,done){
 
-    let Photopath = path + auctionId + '.' + "jpeg";
+    let Photopath = path + auctionId + '.' + contentType;
     res.sendFile(Photopath, {root: './'});
     done(true);
 

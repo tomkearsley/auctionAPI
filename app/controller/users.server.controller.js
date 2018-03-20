@@ -76,7 +76,12 @@ exports.logOut = function(req,res){
     User.checkToken(req,function(result){
         if(result){
             User.ResetToken(result,function(leavingUser){
-                res.status(200).send("OK");
+                if (leavingUser){
+                    res.status(200).send("OK");
+                } else {
+                    res.status(500).send("Internal server error");
+                }
+
             });
 
         } else {

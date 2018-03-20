@@ -23,7 +23,7 @@ exports.createAuction = function(token, auction_data, done) {
     });
 };
 exports.getAuction = function(auctionId,done){
-    let sql = "SELECT DISTINCT * FROM ((auction INNER JOIN auction_user ON auction.auction_userid = auction_user.user_id) INNER JOIN bid ON auction_userid = bid.bid_userid) WHERE auction_id = ?;"
+    let sql = "SELECT * FROM auction WHERE auction_id = ?;"
     db.get_pool().query(sql,auctionId,function (err,rows) {
         if(err){
             done(false);
@@ -31,6 +31,17 @@ exports.getAuction = function(auctionId,done){
             done(rows);
         }
 
+    });
+};
+
+
+exports.getSeller = function(userId,done){
+    db.get_pool().query("SELECT user_id AS id, user_username AS username FROM auction_user WHERE user_id = ? ",userId,function(err,result){
+       if(err){
+           done(false);
+       }  else {
+           done(result);
+       }
     });
 };
 
@@ -75,7 +86,7 @@ exports.getEditableData = function(auctionId,done){
 exports.updateAuction =  function (auctionData,done) {
     sql = "UPDATE auction SET auction_categoryid = ?, auction_title = ?, auction_description = ?, auction_reserveprice = ?,  auction_startingprice = ? ,auction_startingdate = ?, auction_endingdate = ? WHERE auction_id = ?"
     db.get_pool().query(sql,auctionData,
-        function(err,data){
+        function(err){
         if(err){
             done(false);
         } else {
@@ -83,4 +94,15 @@ exports.updateAuction =  function (auctionData,done) {
         }
         });
 
-}
+};
+
+exports.getHighestBid = function(auctionId,done){
+    db.get_pool().query("SELECT max(bid_amount) AS currentBid FROM bid WHERE bid_auctionid = ?",auctionId,
+        function(err,data){
+            if(err){
+                done(false);
+            } else {
+                done(data);
+            }
+        });
+};
