@@ -77,5 +77,14 @@ exports.makeBid = function(req,res){
 };
 
 exports.updateAuction = function(req,res){
+    Auction.getBidHistory(auctionId,function(result){
+        if(result.length > 0){
+            res.status(403).send("Forbidden - bidding has begun on the auction.");
+        } else {
+            User.checkToken(req,function(result){
+
+            });
+        }
+    });
 
 };
