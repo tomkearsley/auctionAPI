@@ -2,7 +2,7 @@ const User = require('../model/users.server.model');
 
 const Auction = require('../model/auction.server.model');
 
-
+const moment = require('moment');
 
 exports.create = function(req,res){
     let token = req.get('X-Authorization');
@@ -12,8 +12,9 @@ exports.create = function(req,res){
         req.body.description,
         req.body.reservePrice,
         req.body.startingBid,
-        req.body.startDateTime,
-        req.body.endDateTime
+        (moment(req.body.startDateTime).format("YYYY-MM-DD hh-mm-ss")),
+        (moment(req.body.endDateTime).format("YYYY-MM-DD hh-mm-ss")),
+        (moment(Date.now()).format("YYYY-MM-DD hh-mm-ss"))
     ]];
     if (req.body.categoryId < 1){
         res.status(400).send("Bad request.");

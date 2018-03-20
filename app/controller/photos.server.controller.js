@@ -3,6 +3,8 @@ const User = require('../model/users.server.model');
 const Photos = require('../model/photos.server.model');
 
 
+
+
 exports.post = function (req,res) {
     let auctionId = parseInt(req.params.id);
     let contentType = req.get("Content-Type");
