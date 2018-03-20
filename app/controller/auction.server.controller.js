@@ -77,14 +77,50 @@ exports.makeBid = function(req,res){
 };
 
 exports.updateAuction = function(req,res){
-    Auction.getBidHistory(auctionId,function(result){
-        if(result.length > 0){
-            res.status(403).send("Forbidden - bidding has begun on the auction.");
-        } else {
-            User.checkToken(req,function(result){
 
+    let new_data = [req.body.categoryId,req.body.title,req.body.description,req.body.startingDate,req.body.endingDate,
+    req.body.reservePrice,req.body.startingBid];
+    let packetDataNames = ["auction_categoryid","auction_title","auction_description","auction_reserveprice",
+        "auction_startingprice","auction_startingdate","auction_endingdate"];
+    let auctionId = req.params.id;
+
+    Auction.getEditableData(auctionId,function(auctionExists){
+        current_data = auctionExists;
+        if(auctionExists){
+            Auction.getBidHistory(auctionId,function(result){
+                if(result.length > 0){
+                    res.status(403).send("Forbidden - bidding has begun on the auction.");
+                } else {
+                    User.checkToken(req,function(result){
+                        let user_id = result;
+                        if(isNaN(user_id) == false && user_id === current_data[0]['auction_userid']){
+                            for(let i = 0; i < 7; i++){
+                                if(new_data[i] == undefined){
+                                    new_data[i] = (current_data[0][packetDataNames[i]]);
+                                }
+                            }
+                            new_data.push(parseInt(auctionId));
+                            Auction.updateAuction(new_data,function(updatedAuction){
+                                if(updatedAuction){
+                                    res.status(200).send("OK");
+                                } else {
+                                    res.status(400).send("Bad request.")
+                                }
+                            });
+
+                        } else {
+                            res.status(401).send("Unauthorized");
+                        }
+
+                    });
+                }
             });
+        } else {
+            res.status(404).send("Not found.");
         }
     });
+
+    //res.status(500).send("Internal server error");
+
 
 };

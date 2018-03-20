@@ -58,3 +58,29 @@ exports.addBid = function(amount,id,user_id,done){
         }
     });
 };
+
+exports.getEditableData = function(auctionId,done){
+    db.get_pool().query("SELECT auction_title,auction_categoryid,auction_description,auction_reserveprice,auction_startingprice,auction_startingdate,auction_endingdate,auction_userid FROM auction WHERE auction_id = ?;",
+        auctionId,function(err,data){
+        if(err){
+            console.log(err);
+            done(false);
+        } else {
+            done(data);
+        }
+        });
+};
+
+
+exports.updateAuction =  function (auctionData,done) {
+    sql = "UPDATE auction SET auction_categoryid = ?, auction_title = ?, auction_description = ?, auction_reserveprice = ?,  auction_startingprice = ? ,auction_startingdate = ?, auction_endingdate = ? WHERE auction_id = ?"
+    db.get_pool().query(sql,auctionData,
+        function(err,data){
+        if(err){
+            done(false);
+        } else {
+            done(true);
+        }
+        });
+
+}
