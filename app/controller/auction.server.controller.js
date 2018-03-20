@@ -103,16 +103,21 @@ exports.makeBid = function(req,res){
     let id = req.params.id;
     let bidTime = (moment(Date.now()).format("YYYY-MM-DD hh-mm-ss"));
     User.checkToken(req,function(result){
-        let user_id = result;
-        Auction.addBid(amount,id,user_id,bidTime,function(bidAdded){
-            if(bidAdded){
-                res.status(200).send("OK");
+        if(isNaN(result)){
+            res.status(401).send("Unauthorized");
+        } else {
+            let user_id = result;
+            Auction.addBid(amount,id,user_id,bidTime,function(bidAdded){
+                if(bidAdded){
+                    res.status(200).send("OK");
 
-            } else{
-                res.status(400).send("Bad request.");
-            }
+                } else{
+                    res.status(400).send("Bad request.");
+                }
 
-        })
+            });
+        }
+
     });
 };
 
