@@ -34,6 +34,84 @@ exports.getAuction = function(auctionId,done){
     });
 };
 
+exports.getAll = function(auct_data, done){
+
+    let skeleton = {
+        "id": 0,
+        "categoryTitle": "string",
+        "categoryId": 0,
+        "title": "string",
+        "reservePrice": 0,
+        "startDateTime": 0,
+        "endDateTime": 0,
+        "currentBid": 0
+    };
+
+    let intialParameter = true;
+
+    let sql = "SELECT DISTINCT category_title AS categoryTitle, category_id AS categoryId, auction_id AS id, auction_title AS title, auction_reserveprice as reservePrice, auction_startingdate AS startDateTime, auction_endingdate AS endDateTime, bid_amount AS amount, bid_userid AS bid FROM category LEFT JOIN auction ON auction.auction_categoryid = category.category_id JOIN bid ON bid.bid_auctionid = auction.auction_id"
+
+    if (auct_data["category-id"] !== undefined) {
+
+        if (intialParameter) {
+            intialParameter = false;
+            sql += " WHERE category_id = " + auct_data["category-id"]
+        } else {
+            sql += " AND category_id = " + auct_data["category-id"]
+        }
+    }
+
+    if (auct_data["seller"] !== undefined) {
+        if (intialParameter) {
+            intialParameter = false;
+            sql += " WHERE auction_userid = " + auct_data["seller"]
+        } else {
+            sql += " AND auction_userid = " + auct_data["seller"]
+        }
+    }
+
+    if (auct_data["bidder"] !== undefined) {
+        if (intialParameter) {
+            intialParameter = false;
+            sql += " WHERE bid = " + auct_data["bidder"]
+        } else {
+            sql += " AND bid = " + auct_data["bidder"]
+        }
+    }
+
+    if (auct_data["q"] !== undefined) {
+        if (intialParameter) {
+            intialParameter = false;
+
+            sql += " WHERE auction_title LIKE '%" + auct_data["q"] + "%'"
+        } else {
+            sql += " AND auction_title LIKE '%" + auct_data["q"] + "%'"
+        }
+    }
+
+
+    db.get_pool().query(sql, function(err, result){
+        if(err) {
+            return done(false);
+
+        } else {
+            let start = 0;
+            let count = result.length;
+
+            if (auct_data["startIndex"] !== undefined) {
+                start = auct_data["startIndex"];
+            }
+            if (auct_data["count"] !== undefined) {
+                count = parseInt(start) + parseInt(auct_data["count"]);
+            }
+            return done(result.slice(start, count));
+        }
+
+
+    })
+
+
+};
 
 
 exports.getSeller = function(userId,done){

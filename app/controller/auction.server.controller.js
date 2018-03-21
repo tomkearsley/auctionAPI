@@ -38,6 +38,31 @@ exports.create = function(req,res){
 };
 
 
+exports.list = function(req,res) {
+    let auct_data  ={
+        "startIndex": req.query.startIndex,
+        "count": req.query.count,
+        "q": req.query.q,
+        "category-id": req.query.category,
+        "seller": req.query.seller,
+        "bidder": req.query.bidder,
+    };
+
+    Auction.getAll(auct_data, function(result){
+        if (result === false){
+            res.status(400).send("Bad request");
+            return;
+        }
+        if(result.length < 1){
+            res.status(404).send("Not found");
+            return;
+        } else {
+            res.status(200).json(result);
+        }
+    });
+};
+
+
 
 exports.getOne = function(req, res) {
     let auctionId = req.params.id;
