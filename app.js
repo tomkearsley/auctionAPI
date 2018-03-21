@@ -8,8 +8,8 @@ db.connect(function (err) {
         console.log('Unable to connect to MySQL');
         process.exit(1);
     } else {
-        app.listen(4841,function(){
-            console.log('Listening on Port: ' + 4841);
+        app.listen(4941,function(){
+            console.log('Listening on Port: ' + 4941);
             });
     }
 });
