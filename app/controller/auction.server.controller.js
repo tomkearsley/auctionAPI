@@ -41,6 +41,10 @@ exports.create = function(req,res){
 
 exports.getOne = function(req, res) {
     let auctionId = req.params.id;
+    if (isNaN(auctionId)){
+        res.status(400).send("Bad request");
+        return;
+    }
     let response = {
         "categoryId": 0,
         "categoryTitle": "string",
@@ -58,7 +62,7 @@ exports.getOne = function(req, res) {
         "bids": []
     };
     Auction.getAuction(auctionId, function(auction) {
-        if (auction) {
+        try {
             response["categoryId"] = auction[0]["auction_categoryid"];
             response["categoryTitle"] = auction[0]["auction_title"];
             response["reservePrice"] = auction[0]["auction_reserveprice"];
@@ -66,8 +70,8 @@ exports.getOne = function(req, res) {
             response["endDateTime"] = auction[0]["auction_endingdate"];
             response["description"] = auction[0]["auction_description"];
             response["creationDateTime"] = auction[0]["auction_creationdate"];
-        } else {
-            res.send(404).send("Not found");
+        } catch(TypeError){
+            res.status(404).send("Not found");
             return;
         }
         Auction.getHighestBid(auctionId,function(currentBid){
