@@ -6,10 +6,9 @@ exports.generateToken = function(userIdentifier,password,user_id) {
         "password": password
 
     };
-    /**
+
     let token = jwt.sign(user,process.env.SECRET_KEY,
         {expiresIn: 4000});
-    **/
-    let token = "123456";
+
     return { "id": user_id, "token": token };
 };
