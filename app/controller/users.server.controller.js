@@ -14,7 +14,8 @@ exports.create = function(req, res) {
             console.log(result);
             res.status(400).send("malformed request");
         } else {
-            res.status(200).send(result);
+            let intresult = parseInt(result);
+            res.status(201).send(result);
         }
     });
 };
@@ -28,7 +29,7 @@ exports.read = function(req,res){
     User.login(userIdentifier,password,function(result){
         if(result){
             let userReply = authenticate.generateToken(userIdentifier,password,result);
-            res.json(userReply);
+            res.status(200).json(userReply);
             let user_id = userReply['id'];
             let token = userReply['token'];
 
@@ -52,7 +53,7 @@ exports.getUser = function(req,res){
     User.checkToken(req,function(result){
         if(result == userID){
             User.getUserJson(result,function(resultantUser){
-                res.json(resultantUser);
+                res.status(200).json(resultantUser);
             });
 
         } else {
@@ -111,7 +112,7 @@ exports.updateUser = function (req,res){
                 user_data.push(correctToken);
                 User.updateUserDetails(user_data,function(result) {
                     if(result){
-                        res.status(200).send("OK");
+                        res.status(201).send("OK");
                     } else {
                         res.status(500).send("Internal server error");
                     }

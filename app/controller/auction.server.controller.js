@@ -38,6 +38,7 @@ exports.create = function(req,res){
 };
 
 
+
 exports.getOne = function(req, res) {
     let auctionId = req.params.id;
     let response = {

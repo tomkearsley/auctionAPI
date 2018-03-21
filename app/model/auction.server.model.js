@@ -35,6 +35,7 @@ exports.getAuction = function(auctionId,done){
 };
 
 
+
 exports.getSeller = function(userId,done){
     db.get_pool().query("SELECT user_id AS id, user_username AS username FROM auction_user WHERE user_id = ? ",userId,function(err,result){
        if(err){
