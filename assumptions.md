@@ -1,0 +1,1 @@
+1. As per the specification, only one user can be logged in at a time.
